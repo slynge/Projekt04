@@ -37,7 +37,7 @@ public class BestillingPane extends GridPane {
         this.add(opretBestillingButton, 1, 3);
 
         errorLabel = new Label();
-        this.add(errorLabel, 0, 3);
+        this.add(errorLabel, 0, 4, 2, 1);
         errorLabel.setStyle("-fx-text-fill: red");
     }
 
@@ -45,18 +45,26 @@ public class BestillingPane extends GridPane {
         Forestilling forestilling = startWindow.getSelectedForestilling();
         Kunde kunde = startWindow.getSelectedKunde();
 
+        if(forestilling == null || kunde == null || pladsListView.getItems().isEmpty() || datoTextField.getText().isEmpty()) {
+            errorLabel.setText("Information mangler.");
+            return;
+        }
+
         ArrayList<Plads> pladser = new ArrayList<>(pladsListView.getSelectionModel().getSelectedItems());
         LocalDate dato = LocalDate.parse(datoTextField.getText());
-        if(forestilling == null || kunde == null || pladser.isEmpty() || dato.toString().isEmpty()) {
-            errorLabel.setText("Information mangler.");
-        }
         Bestilling bestilling = Controller.opretBestillingMedPladser(forestilling, kunde,
                 dato, pladser);
 
         if(bestilling != null) {
+            StringBuilder sb = new StringBuilder();
+            for (Plads plads : bestilling.getPladser()) {
+                sb.append(plads);
+            }
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Bestillingsbekræftelse");
-            alert.setContentText(bestilling.toString());
+            alert.setContentText(bestilling + "\nI har fået følgende pladser:\n" + sb);
+            alert.setWidth(350);
+            alert.setHeight(300);
             alert.showAndWait();
         }
 
@@ -64,12 +72,21 @@ public class BestillingPane extends GridPane {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Bestillingsfejl");
             alert.setContentText("Bestillingen var ikke mulig, da datoen for bestillingen ikke var i forestillingens periode.");
+            alert.setWidth(350);
+            alert.setHeight(300);
             alert.showAndWait();
+            datoTextField.clear();
+            return;
         }
 
         startWindow.clearForestillingPane();
         startWindow.clearKundePane();
         datoTextField.clear();
+        errorLabel.setText("");
 
+    }
+
+    public void setPladsListView(ArrayList<Plads> pladser) {
+        pladsListView.getItems().setAll(pladser);
     }
 }

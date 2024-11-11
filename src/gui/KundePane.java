@@ -43,7 +43,7 @@ public class KundePane extends GridPane {
         opretKundeButton.setOnAction(event -> opretKundeAction());
 
         errorLabel = new Label();
-        this.add(errorLabel, 0, 5);
+        this.add(errorLabel, 0, 5, 2, 1);
         errorLabel.setStyle("-fx-text-fill: red");
     }
 

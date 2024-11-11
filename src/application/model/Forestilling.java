@@ -2,6 +2,7 @@ package application.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Forestilling {
     private String navn;
@@ -27,6 +28,10 @@ public class Forestilling {
         return slutDato;
     }
 
+    public ArrayList<Bestilling> getBestillinger() {
+        return new ArrayList<>(bestillinger);
+    }
+
     public Bestilling createBestilling(LocalDate dato, Kunde kunde) {
         Bestilling bestilling = new Bestilling(dato, kunde, this);
         bestillinger.add(bestilling);
@@ -50,4 +55,13 @@ public class Forestilling {
     public String toString() {
         return String.format("Navn: %-17s Spiller fra %s til %s", navn, startDato, slutDato);
     }
+
+    public ArrayList<Plads> getOptagetPladser() {
+        ArrayList<Plads> optagetPladser = new ArrayList<>();
+        for (Bestilling bestilling : bestillinger) {
+            optagetPladser.addAll(bestilling.getPladser());
+        }
+        return optagetPladser;
+    }
+
 }

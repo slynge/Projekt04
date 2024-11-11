@@ -1,5 +1,6 @@
 package gui;
 
+import application.model.Bestilling;
 import application.model.Forestilling;
 import application.model.Kunde;
 import javafx.application.Application;
@@ -14,6 +15,7 @@ import javafx.stage.Stage;
 public class StartWindow extends Application {
     private ForestillingPane forestillingPane;
     private KundePane kundePane;
+    private BestillingPane bestillingPane;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -29,13 +31,13 @@ public class StartWindow extends Application {
 
     private void initContent(HBox startWindow) {
         // Layout
-        startWindow.setPadding(new Insets(20,20,20,20));
+        startWindow.setPadding(new Insets(20,20,50,20));
         startWindow.setSpacing(20);
 
         // Get panes
-        forestillingPane = new ForestillingPane();
+        forestillingPane = new ForestillingPane(this);
         kundePane = new KundePane();
-        GridPane bestillingPane = new BestillingPane(this);
+        bestillingPane = new BestillingPane(this);
         startWindow.getChildren().addAll(forestillingPane, kundePane, bestillingPane);
 
 
@@ -47,6 +49,10 @@ public class StartWindow extends Application {
 
     public Kunde getSelectedKunde() {
         return kundePane.getSelectedKunde();
+    }
+
+    public BestillingPane getBestillingsPane() {
+        return bestillingPane;
     }
 
     public void clearForestillingPane() {
