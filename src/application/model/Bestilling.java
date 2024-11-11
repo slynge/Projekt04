@@ -32,6 +32,14 @@ public class Bestilling {
         return forestilling;
     }
 
+    public int samletPris() {
+        int samletPris = 0;
+        for (Plads plads : pladser) {
+            samletPris += plads.getPris();
+        }
+        return samletPris;
+    }
+
     public void addPlads(Plads plads) {
         if(!pladser.contains(plads)) {
             pladser.add(plads);

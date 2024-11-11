@@ -2,7 +2,6 @@ package application.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Forestilling {
     private String navn;
@@ -62,6 +61,29 @@ public class Forestilling {
             optagetPladser.addAll(bestilling.getPladser());
         }
         return optagetPladser;
+    }
+
+    public int antalBestiltePladserPåDag(LocalDate dato) {
+        int antalPladser = 0;
+        for (Bestilling bestilling : bestillinger) {
+            if(bestilling.getDato().equals(dato)) {
+                antalPladser += bestilling.getPladser().size();
+            }
+        }
+        return antalPladser;
+    }
+
+    public LocalDate succesDato() {
+        int højesteAntalPladser = 0;
+        LocalDate succesDato = startDato;
+        for(LocalDate dato = startDato; dato.isAfter(slutDato); dato = dato.plusDays(1)) {
+            int antalPladser = antalBestiltePladserPåDag(dato);
+            if(antalPladser > højesteAntalPladser) {
+                succesDato = dato;
+                højesteAntalPladser = antalPladser;
+            }
+        }
+        return succesDato;
     }
 
 }
